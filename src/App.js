@@ -1,13 +1,13 @@
 import './App.css';
 import Header from './header.js';
-import Send_div from './send_div';
+import SendDiv from './sendDiv';
 
 
 function App() {
   return (
     <div className="App">
       <Header/>
-      <Send_div/>
+      <SendDiv/>
     </div>
   );
 }

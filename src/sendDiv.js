@@ -1,7 +1,7 @@
 import React from 'react'
 import TextField from '@mui/material/TextField';
 import { Button, Grid } from '@mui/material';
-const send_div = () => {
+const SendDiv = () => {
   return (
     <Grid container style = {{bottom:20, position: "fixed"}} spacing = {4}>
     <Grid item xs={9} style = {{marginLeft:40}} pl={0} pt={0}>
@@ -15,4 +15,4 @@ const send_div = () => {
   )
 }
 
-export default send_div
+export default SendDiv
