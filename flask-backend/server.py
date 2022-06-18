@@ -3,6 +3,8 @@ from os.path import join, dirname
 from dotenv import load_dotenv
 
 from flask import Flask
+from datetime import datetime
+import pymongo
 from pymongo import MongoClient
 from dotenv import load_dotenv
 
@@ -20,7 +22,7 @@ def get_database():
     client = MongoClient(CONNECTION_STRING)
 
     # Create the database for our example (we will use the same database throughout the tutorial
-    return client['users']
+    return client['test']
     
 # This is added so that many files can reuse the function get_database()
 if __name__ == "__main__":    
@@ -36,5 +38,9 @@ app = Flask(__name__)
 def login():
     return {"login info": ["username: 3", "password: 4"]}
 
+@app.route("/check_login")
+def check_login():
+    dbname['login_times'].insert_one({"time": datetime.now()})
+    return {"time": datetime.now()}
 if __name__ == "__main__":
     app.run(debug=True)
