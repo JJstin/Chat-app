@@ -7,8 +7,8 @@ const SendDiv = () => {
     console.log(value);
   }
   return (
-    <Grid container style = {{bottom:20, position: "fixed"}} spacing = {4}>
-    <Grid item xs={9} style = {{marginLeft:40}} pl={0} pt={0}>
+    <Grid container style = {{bottom:20, position: "fixed", paddingLeft: 40}} spacing = {2}>
+    <Grid item xs={11.2}  pl={0} pt={0}>
       <TextField 
         id="chat box" 
         width="90%" 
@@ -21,7 +21,7 @@ const SendDiv = () => {
         onChange ={ (v) => setValue(v.target.value)}
         />
     </Grid>
-    <Grid item xs = {2} display="flex">
+    <Grid item xs = {0.8} display="flex">
       <Button variant="contained" onClick={sendMessage}>Send</Button>
     </Grid>
     
