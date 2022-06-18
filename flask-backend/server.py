@@ -1,8 +1,19 @@
+import os
+from os.path import join, dirname
+from dotenv import load_dotenv
+
 from flask import Flask
 from pymongo import MongoClient
+from dotenv import load_dotenv
+
 def get_database():
+    dotenv_path = join(dirname(__file__), '.env')
+    load_dotenv(dotenv_path)    
+
     # Provide the mongodb atlas url to connect python to mongodb using pymongo
-    CONNECTION_STRING = "mongodb+srv://justinshi:3fW61ONLirpGInoT@Cluster0.mongodb.net/test"
+    CONNECTION_STRING = os.environ.get("SERVER_CONNECTION_STRING")
+    # "mongodb+srv://justinshi:3fW61ONLirpGInoT@Cluster0.mongodb.net/test"
+    
 
     # Create a connection using MongoClient. You can import MongoClient or use pymongo.MongoClient
     from pymongo import MongoClient
