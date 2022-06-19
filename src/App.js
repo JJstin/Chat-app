@@ -3,6 +3,13 @@ import './App.css';
 import Header from './header.js';
 import SendDiv from './sendDiv';
 
+import {
+  Routes,
+  Route,
+  Link,
+  Outlet,
+} from "react-router-dom";
+
 
 function App() {
   const [data, setData] = useState([{}])
@@ -19,8 +26,12 @@ function App() {
   }, [])
   return (
     <div className="App">
-      <Header/>
-      <SendDiv/>
+      <Routes>
+      <Route path="/">
+        <Route path="dashboard" element={<><Header /><SendDiv /></>} />
+      </Route>
+    </Routes>
+
     </div>
   );
 }
