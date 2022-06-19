@@ -4,6 +4,7 @@ import Header from './header.js';
 import SendDiv from './sendDiv';
 
 import {
+  BrowserRouter as Router,
   Routes,
   Route,
   Link,
@@ -25,14 +26,14 @@ function App() {
     )
   }, [])
   return (
-    <div className="App">
+    // <div className="App">
+    <Router>
       <Routes>
-      <Route path="/">
-        <Route path="dashboard" element={<><Header /><SendDiv /></>} />
-      </Route>
-    </Routes>
+        <Route path="/dashboard" element={<div className="App"><Header /><SendDiv /></div>} />
+      </Routes>
+    </Router>
 
-    </div>
+    // </div>
   );
 }
 
