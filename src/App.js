@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import Header from './header.js';
-import SendDiv from './sendDiv';
+import SendDiv from './sendDiv.js';
+import NotFoundError from './notFoundError.js'
 
 import {
   BrowserRouter as Router,
@@ -30,6 +31,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/dashboard" element={<div className="App"><Header /><SendDiv /></div>} />
+        <Route path="*" component={<NotFoundError/>} />
       </Routes>
     </Router>
 
