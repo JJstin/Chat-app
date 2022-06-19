@@ -30,7 +30,7 @@ function App() {
   return (
     <Router>
       <Routes>
-      <Route path="/" element={<MainPage />} />
+        <Route path="/" element={<MainPage />} />
         <Route path="/dashboard" element={<div className="App"><Header /><SendDiv /></div>} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />

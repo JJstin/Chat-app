@@ -1,9 +1,16 @@
 import React from 'react'
+import { Button }from '@mui/material';
+
 
 const MainPage = () => {
 
   return (
-    <div>Main page</div>
+    <div>Welcome to Chat App!
+        <Button>Log in</Button>
+        <Button> Sign up</Button>
+    </div>
+    
+    
   )
 }
 
