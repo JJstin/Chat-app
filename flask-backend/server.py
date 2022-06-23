@@ -38,7 +38,7 @@ app = Flask(__name__)
 def login():
     return {"login info": ["username: 3", "password: 4"]}
 
-@app.route("/signup")
+@app.route("/signup", methods=['POST'])
 def signup():
     if (dbname['accounts'].find({"username" : "testjun22_1"})):
         return {"1":"1"}
