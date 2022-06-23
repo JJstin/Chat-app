@@ -40,12 +40,10 @@ def login():
 
 @app.route("/signup")
 def signup():
+    if (dbname['accounts'].find({"username" : "testjun22_1"})):
+        return {"1":"1"}
     
-
-@app.route("/check_login")
-def check_login():
-    dbname['login_times'].insert_one({"time": datetime.now()})
-    return {"time": datetime.now()}
 if __name__ == "__main__":
     app.run(debug=True)
+
 
