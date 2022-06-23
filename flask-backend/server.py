@@ -38,9 +38,14 @@ app = Flask(__name__)
 def login():
     return {"login info": ["username: 3", "password: 4"]}
 
+@app.route("/signup")
+def signup():
+    
+
 @app.route("/check_login")
 def check_login():
     dbname['login_times'].insert_one({"time": datetime.now()})
     return {"time": datetime.now()}
 if __name__ == "__main__":
     app.run(debug=True)
+
