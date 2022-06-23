@@ -1,8 +1,21 @@
-import { Box, TextField } from '@mui/material'
-import React from 'react'
+import { Box, Button, TextField } from '@mui/material'
+import React, { useState } from 'react'
 
 const Signup = () => {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
 
+  const onSignup = () => {
+    fetch('/signup',{
+      method: 'POST',
+      body: JSON.stringify({
+        username: username,
+        password: password,
+        email: email
+      })
+    })
+  };
   return (
     <Box
     component="form"
@@ -13,20 +26,28 @@ const Signup = () => {
     autoComplete="off"
   >
     <div>
-        <TextField required id="Email" label="Email" variant="outlined" />
-        <TextField required id="Username" label="Username" variant="outlined" />
+        <TextField 
+          required 
+          id="Email" 
+          label="Email" 
+          variant="outlined" 
+          onChange={(v) => setEmail(v.target.value)}
+        />
+        <TextField 
+          required 
+          id="Username" 
+          label="Username" 
+          variant="outlined" 
+          onChange={(v) => setUsername(v.target.value)}
+        />
         <TextField
-            required
+          required
           id="Password"
           label="Password"
           type="password"
+          onChange={(v) => setPassword(v.target.value)}
         />
-        {/* <TextField
-          required
-          id="Confirm Password"
-          label="Confirm Password"
-          type="password"
-        /> */}
+       <Button onClick={onSignup} variant="contained">sign up</Button>
 
 
 

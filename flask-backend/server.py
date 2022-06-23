@@ -8,6 +8,8 @@ import pymongo
 from pymongo import MongoClient
 from dotenv import load_dotenv
 
+import json
+
 def get_database():
     dotenv_path = join(dirname(__file__), '.env')
     load_dotenv(dotenv_path)    
@@ -40,10 +42,10 @@ def login():
 
 @app.route("/signup", methods=['POST'])
 def signup():
-    if (dbname['accounts'].find({"username" : "testjun22_1"})):
-        return {"1":"1"}
+    request_data = json.loads(request.data)
+    if (dbname['accounts'].find(request_data.username)):
+        dbname['accounts'].insert(request_data)
+        
     
-if __name__ == "__main__":
-    app.run(debug=True)
 
 
