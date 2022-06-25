@@ -44,12 +44,7 @@ def login():
     return {"login info": ["username: 3", "password: 4"]}
 
 @app.route("/signup", methods=['POST'])
-def signup():
-    # username = request.form['username']
-    # password = request.form['password']
-    # if not username or not password:
-    #     raise HttpException
-    
+async def signup():
     # user = await dbname['users'].find_one(username = username)
 
     # if user:
@@ -60,7 +55,16 @@ def signup():
         
     body = request.json
     username = body['username']
-    dbname['accounts'].insert_one({'username':username})
+    password = body['password']
+    email = body['email']
+
+    if not body or not username or not password:
+        pass
+    
+    user = await dbname['users'].find_one(username = username)
+    if user:
+        pass
+    dbname['accounts'].insert_one({'username':username, 'password': password, 'email': email})
     return body
         
 if __name__ == "__main__":    
