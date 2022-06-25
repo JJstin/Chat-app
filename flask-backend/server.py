@@ -8,6 +8,9 @@ import pymongo
 from pymongo import MongoClient
 from dotenv import load_dotenv
 
+from flask import request
+
+
 import json
 
 def get_database():
@@ -42,10 +45,14 @@ def login():
 
 @app.route("/signup", methods=['POST'])
 def signup():
-    request_data = json.loads(request.data)
-    if (dbname['accounts'].find(request_data.username)):
-        dbname['accounts'].insert(request_data)
-        
+    body = request.json
     
+    username = body['username']
+    dbname['accounts'].insert_one({'username':username})
+    return {"success": "success"}
+        
+if __name__ == "__main__":    
+    app.debug = True
+    app.run()
 
 
