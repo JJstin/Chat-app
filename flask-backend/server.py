@@ -2,7 +2,7 @@ import os
 from os.path import join, dirname
 from dotenv import load_dotenv
 
-from flask import Flask
+from flask import Flask, request
 from datetime import datetime
 import pymongo
 from pymongo import MongoClient
@@ -41,10 +41,19 @@ def login():
     return {"login info": ["username: 3", "password: 4"]}
 
 @app.route("/signup", methods=['POST'])
-def signup():
-    request_data = json.loads(request.data)
-    if (dbname['accounts'].find(request_data.username)):
-        dbname['accounts'].insert(request_data)
+async def signup():
+    username = request.form['username']
+    password = request.form['password']
+    if not username or not password:
+        raise HttpException
+    
+    user = await dbname['users'].find_one(username = username)
+
+    if user:
+        # raise HttpException, duplicate username
+        pass
+    userobj = {'username': username, 'password': password}
+    dbname['users'].insert_one(userobj)
         
     
 
