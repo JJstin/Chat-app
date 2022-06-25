@@ -61,7 +61,7 @@ def signup():
     body = request.json
     username = body['username']
     dbname['accounts'].insert_one({'username':username})
-    return {"success": "success"}
+    return body
         
 if __name__ == "__main__":    
     app.debug = True

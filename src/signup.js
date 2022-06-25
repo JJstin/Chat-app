@@ -18,6 +18,8 @@ const Signup = () => {
         "password": password,
         "email": email
       })
+    }).then(res => {
+      console.log(res);
     })
   };
   return (
