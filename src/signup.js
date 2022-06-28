@@ -38,7 +38,12 @@ const Signup = () => {
           label="Email" 
           variant="outlined" 
           onChange={(v) => setEmail(v.target.value)}
-          autoComplete = "false"
+          inputProps={{
+            autocomplete: 'off',
+            form: {
+              autocomplete: 'off',
+            },
+          }}
           
         />
         <TextField 
@@ -47,7 +52,12 @@ const Signup = () => {
           label="Username" 
           variant="outlined" 
           onChange={(v) => setUsername(v.target.value)}
-          autoComplete = "false"
+          inputProps={{
+            autocomplete: 'off',
+            form: {
+              autocomplete: 'off',
+            },
+          }}
         />
         <TextField
           required
@@ -55,7 +65,12 @@ const Signup = () => {
           label="Password"
           type="password"
           onChange={(v) => setPassword(v.target.value)}
-          autoComplete = "false"
+          inputProps={{
+            autocomplete: 'new-password',
+            form: {
+              autocomplete: 'off',
+            },
+          }}
         />
        <Button onClick={onSignup} variant="contained">sign up</Button>
 
