@@ -8,8 +8,6 @@ import pymongo
 from pymongo import MongoClient
 from dotenv import load_dotenv
 
-from flask import request
-
 
 import json
 
@@ -52,20 +50,23 @@ async def signup():
     #     pass
     # userobj = {'username': username, 'password': password}
     # dbname['users'].insert_one(userobj)
-        
-    body = request.json
-    username = body['username']
-    password = body['password']
-    email = body['email']
+    try:    
+        body = request.json
+        username = body['username']
+        password = body['password']
+        email = body['email']
 
-    if not body or not username or not password:
-        pass
-    
-    user = await dbname['users'].find_one(username = username)
-    if user:
-        pass
-    dbname['accounts'].insert_one({'username':username, 'password': password, 'email': email})
-    return body
+        if not body or not username or not password:
+            pass
+        
+        user = await dbname['users'].find_one(username = username)
+        if user:
+            pass
+        dbname['accounts'].insert_one({'username':username, 'password': password, 'email': email})
+        return body
+    except Exception as e:
+        print(e)
+        return e
         
 if __name__ == "__main__":    
     app.debug = True
