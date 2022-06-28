@@ -57,12 +57,21 @@ def signup():
         email = body['email']
 
         if not body or not username or not password:
-            pass
+            return {
+                "message": "Please provide user details",
+                "data": None,
+                "error": "Bad request"
+            }, 400
         
-        user =  dbname['users'].find_one('username' == username)
+        user = dbname['accounts'].find_one({'username': username})
+        print(user)
         if user:
-            pass
-        dbname['accounts'].insert_one({'username':username, 'password': password, 'email': email})
+            return {
+                "message": "username already exists",
+                "data": None,
+                "error": "Conflict"
+            }, 409
+        dbname['accounts'].insert_one({'username': username, 'password': password, 'email': email})
         return body
     except Exception as e:
         print(e)
