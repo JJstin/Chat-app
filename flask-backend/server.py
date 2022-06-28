@@ -42,7 +42,7 @@ def login():
     return {"login info": ["username: 3", "password: 4"]}
 
 @app.route("/signup", methods=['POST'])
-async def signup():
+def signup():
     # user = await dbname['users'].find_one(username = username)
 
     # if user:
@@ -59,7 +59,7 @@ async def signup():
         if not body or not username or not password:
             pass
         
-        user = await dbname['users'].find_one(username = username)
+        user =  dbname['users'].find_one('username' == username)
         if user:
             pass
         dbname['accounts'].insert_one({'username':username, 'password': password, 'email': email})

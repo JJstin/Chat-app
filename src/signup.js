@@ -38,6 +38,8 @@ const Signup = () => {
           label="Email" 
           variant="outlined" 
           onChange={(v) => setEmail(v.target.value)}
+          autoComplete = "false"
+          
         />
         <TextField 
           required 
@@ -45,6 +47,7 @@ const Signup = () => {
           label="Username" 
           variant="outlined" 
           onChange={(v) => setUsername(v.target.value)}
+          autoComplete = "false"
         />
         <TextField
           required
@@ -52,6 +55,7 @@ const Signup = () => {
           label="Password"
           type="password"
           onChange={(v) => setPassword(v.target.value)}
+          autoComplete = "false"
         />
        <Button onClick={onSignup} variant="contained">sign up</Button>
 
