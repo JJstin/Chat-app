@@ -39,9 +39,9 @@ const Signup = () => {
           variant="outlined" 
           onChange={(v) => setEmail(v.target.value)}
           inputProps={{
-            autocomplete: 'off',
+            autoComplete: 'off',
             form: {
-              autocomplete: 'off',
+              autoComplete: 'off',
             },
           }}
           
@@ -53,9 +53,9 @@ const Signup = () => {
           variant="outlined" 
           onChange={(v) => setUsername(v.target.value)}
           inputProps={{
-            autocomplete: 'off',
+            autoComplete: 'off',
             form: {
-              autocomplete: 'off',
+              autoComplete: 'off',
             },
           }}
         />
@@ -66,9 +66,9 @@ const Signup = () => {
           type="password"
           onChange={(v) => setPassword(v.target.value)}
           inputProps={{
-            autocomplete: 'new-password',
+            autoComplete: 'new-password',
             form: {
-              autocomplete: 'off',
+              autoComplete: 'off',
             },
           }}
         />
