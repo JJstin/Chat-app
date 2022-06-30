@@ -64,7 +64,7 @@ def signup():
             }, 409
         
         createTime = datetime.now().strftime("%H:%M:%S")
-        userObj = {'username': username, 'password': password, 'email': email, 'creatAt': createTime, 'updateAt': createTime}
+        userObj = {'username': username, 'password': password, 'email': email, 'createdAt': createTime, 'updatedAt': createTime}
         dbname['accounts'].insert_one(userObj)
         return body
     except Exception as e:
