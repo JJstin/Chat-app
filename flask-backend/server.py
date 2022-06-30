@@ -7,9 +7,7 @@ from datetime import datetime
 import pymongo
 from pymongo import MongoClient
 from dotenv import load_dotenv
-
-
-import json
+from datetime import datetime
 
 def get_database():
     dotenv_path = join(dirname(__file__), '.env')
@@ -43,13 +41,6 @@ def login():
 
 @app.route("/signup", methods=['POST'])
 def signup():
-    # user = await dbname['users'].find_one(username = username)
-
-    # if user:
-    #     # raise HttpException, duplicate username
-    #     pass
-    # userobj = {'username': username, 'password': password}
-    # dbname['users'].insert_one(userobj)
     try:    
         body = request.json
         username = body['username']
@@ -71,7 +62,10 @@ def signup():
                 "data": None,
                 "error": "Conflict"
             }, 409
-        dbname['accounts'].insert_one({'username': username, 'password': password, 'email': email})
+        
+        createTime = datetime.now().strftime("%H:%M:%S")
+        userObj = {'username': username, 'password': password, 'email': email, 'creatAt': createTime, 'updateAt': createTime}
+        dbname['accounts'].insert_one(userObj)
         return body
     except Exception as e:
         print(e)
