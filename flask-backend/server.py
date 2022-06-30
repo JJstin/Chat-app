@@ -2,11 +2,12 @@ import os
 from os.path import join, dirname
 from dotenv import load_dotenv
 
-from flask import Flask
+from flask import Flask, request
 from datetime import datetime
 import pymongo
 from pymongo import MongoClient
 from dotenv import load_dotenv
+from datetime import datetime
 
 def get_database():
     dotenv_path = join(dirname(__file__), '.env')
@@ -38,9 +39,40 @@ app = Flask(__name__)
 def login():
     return {"login info": ["username: 3", "password: 4"]}
 
-@app.route("/check_login")
-def check_login():
-    dbname['login_times'].insert_one({"time": datetime.now()})
-    return {"time": datetime.now()}
-if __name__ == "__main__":
-    app.run(debug=True)
+@app.route("/signup", methods=['POST'])
+def signup():
+    try:    
+        body = request.json
+        username = body['username']
+        password = body['password']
+        email = body['email']
+
+        if not body or not username or not password:
+            return {
+                "message": "Please provide user details",
+                "data": None,
+                "error": "Bad request"
+            }, 400
+        
+        user = dbname['accounts'].find_one({'username': username})
+        print(user)
+        if user:
+            return {
+                "message": "username already exists",
+                "data": None,
+                "error": "Conflict"
+            }, 409
+        
+        createTime = datetime.now().strftime("%H:%M:%S")
+        userObj = {'username': username, 'password': password, 'email': email, 'createdAt': createTime, 'updatedAt': createTime}
+        dbname['accounts'].insert_one(userObj)
+        return body
+    except Exception as e:
+        print(e)
+        return e
+        
+if __name__ == "__main__":    
+    app.debug = True
+    app.run()
+
+
