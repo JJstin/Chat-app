@@ -8,6 +8,8 @@ import pymongo
 from pymongo import MongoClient
 from dotenv import load_dotenv
 from datetime import datetime
+from flask_jwt_extended import create_access_token,get_jwt,get_jwt_identity, \
+                               unset_jwt_cookies, jwt_required, JWTManager
 
 def get_database():
     dotenv_path = join(dirname(__file__), '.env')
@@ -33,11 +35,9 @@ if __name__ == "__main__":
 
 
 app = Flask(__name__)
-# login API Route
 
-@app.route("/login")
-def login():
-    return {"login info": ["username: 3", "password: 4"]}
+app.config["JWT_SECRET_KEY"] = "please-remember-to-change-me"
+jwt = JWTManager(app)
 
 @app.route("/signup", methods=['POST'])
 def signup():
@@ -70,6 +70,20 @@ def signup():
     except Exception as e:
         print(e)
         return e
+
+
+@app.route('/login', methods=["POST"])
+def login():
+    username = request.json.get("username", None)
+    password = request.json.get("password", None)
+    
+    user = dbname['accounts'].find_one({'username': username})
+    if user is None or user['password'] != password:
+        return {"msg": "Wrong username or password"}, 401
+
+    access_token = create_access_token(identity=username)
+    response = {"access_token":access_token}
+    return response
         
 if __name__ == "__main__":    
     app.debug = True
