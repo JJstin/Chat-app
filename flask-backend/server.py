@@ -77,8 +77,8 @@ def login():
     username = request.json.get("username", None)
     password = request.json.get("password", None)
     
-    user = dbname['accounts'].find_one({'username': username})
-    if user is None or user['password'] != password:
+    user = dbname['accounts'].find_one({'username': username, 'password': password})
+    if user is None:
         return {"msg": "Wrong username or password"}, 401
 
     access_token = create_access_token(identity=username)
