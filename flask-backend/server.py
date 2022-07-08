@@ -2,7 +2,7 @@ import os
 from os.path import join, dirname
 from dotenv import load_dotenv
 
-from flask import Flask, request
+from flask import Flask, request, jsonify
 from datetime import datetime
 import pymongo
 from pymongo import MongoClient
@@ -83,6 +83,12 @@ def login():
 
     access_token = create_access_token(identity=username)
     response = {"access_token":access_token}
+    return response
+
+@app.route("/logout", methods=["POST"])
+def logout():
+    response = jsonify({"msg": "logout successful"})
+    unset_jwt_cookies(response)
     return response
         
 if __name__ == "__main__":    
