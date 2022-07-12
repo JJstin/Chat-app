@@ -1,9 +1,13 @@
 import os
+import datetime
+
+from datetime import timedelta, timezone
+
+
 from os.path import join, dirname
 from dotenv import load_dotenv
 
 from flask import Flask, request, jsonify
-from datetime import datetime
 import pymongo
 from pymongo import MongoClient
 from dotenv import load_dotenv
@@ -37,7 +41,25 @@ if __name__ == "__main__":
 app = Flask(__name__)
 
 app.config["JWT_SECRET_KEY"] = "please-remember-to-change-me"
+app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=1)
 jwt = JWTManager(app)
+
+@app.after_request
+def refresh_expiring_jwts(response):
+    try:
+        exp_timestamp = get_jwt()["exp"]
+        now = datetime.now(timezone(timedelta(hours=-5), 'EST'))
+        target_timestamp = datetime.timestamp(now + timedelta(minutes=30))
+        if target_timestamp > exp_timestamp:
+            access_token = create_access_token(identity=get_jwt_identity())
+            data = response.get_json()
+            if type(data) is dict:
+                data["access_token"] = access_token 
+                response.data = json.dumps(data)
+        return response
+    except (RuntimeError, KeyError):
+        # Case where there is not a valid JWT. Just return the original respone
+        return response
 
 @app.route("/signup", methods=['POST'])
 def signup():
@@ -81,6 +103,10 @@ def login():
     if user is None:
         return {"msg": "Wrong username or password"}, 401
 
+    last_update = {"username": username }
+    new_modified = { "$set": { "LastModified": datetime.now(timezone(timedelta(hours=-4), 'EST')).strftime("%y-%m-%d-%H:%M:%S") } }
+    dbname['accounts'].update_one(last_update, new_modified)
+
     access_token = create_access_token(identity=username)
     response = {"access_token":access_token}
     return response
@@ -90,9 +116,16 @@ def logout():
     response = jsonify({"msg": "logout successful"})
     unset_jwt_cookies(response)
     return response
-        
+
+@app.route('/profile')
+@jwt_required()
+def my_profile():
+    response_body = {
+        "name": "Justin",
+        "about" :"Hello! I'm a full stack developer that loves python and javascript"
+    }
+    return response_body
+
 if __name__ == "__main__":    
     app.debug = True
     app.run()
-
-
