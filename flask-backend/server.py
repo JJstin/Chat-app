@@ -1,13 +1,15 @@
 import os
+import json
 from os.path import join, dirname
 from dotenv import load_dotenv
 
-from flask import Flask, request
-from datetime import datetime
+from flask import Flask, request, jsonify
 import pymongo
 from pymongo import MongoClient
 from dotenv import load_dotenv
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
+from flask_jwt_extended import create_access_token,get_jwt,get_jwt_identity, \
+                               unset_jwt_cookies, jwt_required, JWTManager
 
 def get_database():
     dotenv_path = join(dirname(__file__), '.env')
@@ -33,11 +35,27 @@ if __name__ == "__main__":
 
 
 app = Flask(__name__)
-# login API Route
 
-@app.route("/login")
-def login():
-    return {"login info": ["username: 3", "password: 4"]}
+app.config["JWT_SECRET_KEY"] = "please-remember-to-change-me"
+app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=1)
+jwt = JWTManager(app)
+
+@app.after_request
+def refresh_expiring_jwts(response):
+    try:
+        exp_timestamp = get_jwt()["exp"]
+        now = datetime.now(timezone(timedelta(hours=-4), 'EST'))
+        target_timestamp = datetime.timestamp(now + timedelta(minutes=30))
+        if target_timestamp > exp_timestamp:
+            access_token = create_access_token(identity=get_jwt_identity())
+            data = response.get_json()
+            if type(data) is dict:
+                data["access_token"] = access_token 
+                response.data = json.dumps(data)
+        return response
+    except (RuntimeError, KeyError):
+        # Case where there is not a valid JWT. Just return the original respone
+        return response
 
 @app.route("/signup", methods=['POST'])
 def signup():
@@ -63,16 +81,47 @@ def signup():
                 "error": "Conflict"
             }, 409
         
-        createTime = datetime.now().strftime("%H:%M:%S")
+        createTime = datetime.now(timezone(timedelta(hours=-4), 'EST')).strftime("%y-%m-%d-%H:%M:%S")
         userObj = {'username': username, 'password': password, 'email': email, 'createdAt': createTime, 'updatedAt': createTime}
         dbname['accounts'].insert_one(userObj)
         return body
     except Exception as e:
         print(e)
         return e
-        
+
+
+@app.route('/login', methods=["POST"])
+def login():
+    username = request.json.get("username", None)
+    password = request.json.get("password", None)
+    
+    user = dbname['accounts'].find_one({'username': username, 'password': password})
+    if user is None:
+        return {"msg": "Wrong username or password"}, 401
+
+    last_update = {"username": username }
+    new_modified = { "$set": { "LastModified": datetime.now(timezone(timedelta(hours=-4), 'EST')).strftime("%y-%m-%d-%H:%M:%S") } }
+    dbname['accounts'].update_one(last_update, new_modified)
+
+    access_token = create_access_token(identity=username)
+    response = {"access_token":access_token}
+    return response
+
+@app.route("/logout", methods=["POST"])
+def logout():
+    response = jsonify({"msg": "logout successful"})
+    unset_jwt_cookies(response)
+    return response
+
+@app.route('/profile')
+@jwt_required()
+def my_profile():
+    response_body = {
+        "name": "Justin",
+        "about" :"Hello! I'm a full stack developer that loves python and javascript"
+    }
+    return response_body
+
 if __name__ == "__main__":    
     app.debug = True
     app.run()
-
-
