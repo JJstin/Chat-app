@@ -1,9 +1,5 @@
 import os
-import datetime
-
-from datetime import timedelta, timezone
-
-
+import json
 from os.path import join, dirname
 from dotenv import load_dotenv
 
@@ -11,7 +7,7 @@ from flask import Flask, request, jsonify
 import pymongo
 from pymongo import MongoClient
 from dotenv import load_dotenv
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 from flask_jwt_extended import create_access_token,get_jwt,get_jwt_identity, \
                                unset_jwt_cookies, jwt_required, JWTManager
 
@@ -48,7 +44,7 @@ jwt = JWTManager(app)
 def refresh_expiring_jwts(response):
     try:
         exp_timestamp = get_jwt()["exp"]
-        now = datetime.now(timezone(timedelta(hours=-5), 'EST'))
+        now = datetime.now(timezone(timedelta(hours=-4), 'EST'))
         target_timestamp = datetime.timestamp(now + timedelta(minutes=30))
         if target_timestamp > exp_timestamp:
             access_token = create_access_token(identity=get_jwt_identity())
@@ -85,7 +81,7 @@ def signup():
                 "error": "Conflict"
             }, 409
         
-        createTime = datetime.now().strftime("%H:%M:%S")
+        createTime = datetime.now(timezone(timedelta(hours=-4), 'EST')).strftime("%y-%m-%d-%H:%M:%S")
         userObj = {'username': username, 'password': password, 'email': email, 'createdAt': createTime, 'updatedAt': createTime}
         dbname['accounts'].insert_one(userObj)
         return body
