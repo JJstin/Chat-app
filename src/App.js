@@ -3,6 +3,7 @@ import './App.css';
 import Header from './header.js';
 import SendDiv from './sendDiv.js';
 import NotFoundError from './notFoundError.js'
+import useToken from './useToken.js'
 
 import {
   BrowserRouter as Router,
@@ -27,6 +28,8 @@ function App() {
       }
     )
   }, [])
+
+  const { token, removeToken, setToken } = useToken();
   return (
     <Router>
       <Routes>
