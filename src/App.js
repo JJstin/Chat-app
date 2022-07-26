@@ -18,16 +18,16 @@ import Signup from './signup';
 function App() {
   //const [data, setData] = useState([{}])
 
-  useEffect(() => {
-    fetch("/login").then(
-      res => res.json()
-    ).then(
-      data => {
-        //setData(data)
-        console.log(data)
-      }
-    )
-  }, [])
+  // useEffect(() => {
+  //   fetch("/login").then(
+  //     res => res.json()
+  //   ).then(
+  //     data => {
+  //       //setData(data)
+  //       console.log(data)
+  //     }
+  //   )
+  // }, [])
 
   const { token, removeToken, setToken } = useToken();
   return (
