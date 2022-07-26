@@ -1,12 +1,31 @@
 import {React, useState} from 'react'
 import { Box, Button, TextField } from '@mui/material'
 
-const Login = () => {
+const Login = (props) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  function logMeIn(){
-
+  const logMeIn = () => {
+    fetch('/login', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        "username": username,
+        "password": password,
+      })
+    }).then(res => {
+      console.log(res);
+      props.setToken(res.data.access_token);
+    }).catch(err => {
+      if (err.response) {
+        console.log(err.response)
+        console.log(err.response.status)
+        console.log(err.response.headers)
+        }
+    })
   }
 
 
