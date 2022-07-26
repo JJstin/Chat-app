@@ -35,7 +35,7 @@ function App() {
       <Routes>
         <Route path="/" element={<MainPage />} />
         <Route path="/dashboard" element={<div className="App"><Header /><SendDiv /></div>} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/login" setToken={setToken} element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="*" element={<NotFoundError/>} />
       </Routes>
