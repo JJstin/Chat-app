@@ -6,26 +6,37 @@ const Login = (props) => {
   const [password, setPassword] = useState("");
 
   const logMeIn = () => {
+    
     fetch('/login', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Content-Length': '<calculated when request is sent>'
       },
       body: JSON.stringify({
         "username": username,
         "password": password,
       })
-    }).then(res => {
-      console.log(res);
-      props.setToken(res.data.access_token);
-    }).catch(err => {
+    })
+    .then(response => response.text())
+    .then(data => {
+      console.log(data)
+      console.log(data.access_token)
+      props.setToken(data.access_token)
+    })
+    .catch(err => {
       if (err.response) {
         console.log(err.response)
         console.log(err.response.status)
         console.log(err.response.headers)
         }
     })
+    console.log(sessionStorage.getItem('token'))
+    setUsername("")
+    setPassword("")
+
+
   }
 
 
