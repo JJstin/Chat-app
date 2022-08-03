@@ -19,11 +19,12 @@ const Login = (props) => {
         "password": password,
       })
     })
-    .then(response => response.text())
+    .then(response => response.json())
     .then(data => {
       console.log(data)
       console.log(data.access_token)
-      props.setToken(data.access_token)
+      //sessionStorage.setItem('token', data.access_token);
+      props.saveToken(data.access_token)
     })
     .catch(err => {
       if (err.response) {

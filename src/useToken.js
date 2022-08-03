@@ -9,7 +9,9 @@ const useToken = () => {
   const [token, setToken] = useState(getToken());
 
   const saveToken = (userToken) => {
+    console.log("calling set token")
     sessionStorage.setItem('token', userToken);
+    
     setToken(userToken);
   };
 
